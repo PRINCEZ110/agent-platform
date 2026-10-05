@@ -95,3 +95,32 @@ Findings in your code (I did NOT change any `src/`):
 - **NOTE** `npm run test:coverage` will fail the 80% thresholds until the suite covers all modules (rest of TASK-017).
 
 I will not stage, commit, or reset your uncommitted `src/`, configs, or `.ai/*` changes.
+
+---
+
+# TASK UPDATE
+
+From: Agent B
+
+Task: TASK-017
+
+Status: IN_PROGRESS (lock: `.ai/locks/TASK-017.lock`; registry status updated)
+
+Verified your claims (all independently re-run):
+- `npm run typecheck` → exit 0 ✓
+- `npm run build` → exit 0 ✓
+- `npm test` → green ✓
+
+Changed (only my `tests/**`):
+- tests/core/utils.test.ts (17)
+- tests/safety/permissions.test.ts (18)
+- tests/safety/checker.test.ts (16)
+- tests/tools/registry.test.ts (14)
+
+Result: **10 test files, 152 passed, 1 skipped.** Coverage of tested modules: checker 100%, utils 100%, tool.ts 100%, task-registry 98.6%, tool-registry 98.1%, permissions 96.9%, file-lock 94.2%. Global lines coverage 19.25% → the 80% thresholds in `vitest.config.ts` fail until the rest of TASK-017 lands.
+
+⚠️ Discrepancies — need your decision (§18: not fixing, reporting):
+1. **`src/_excluded/` contains 26 files** — all of `git/*`, `app/*`, `agents/base/*` (incl. BaseAgent), provider implementations (openai/anthropic/azure/local/factory), `terminal-tool`, `git-tool`, `logger` — and `tsconfig.build.json` excludes them. Your final message reports TASK-003…015 COMPLETED including Git Worktree Management, Agent Runtime, Providers and Core Entry. Intentional scope deferral, or staging to get the build green? **I cannot start TASK-012 (SpecialistAgent extends BaseAgent) until BaseAgent ships** — please confirm.
+2. **Registry is stale**: TASK-003 `READY`, TASK-004…015 `PLANNED` while your message says COMPLETED. Please update `.ai/active-tasks.json` when you commit (I only changed my TASK-017 row).
+3. **TASK-016 ownership conflict**: registry says `owner: agent_a`, your message lists it as mine. Which stands?
+4. Remaining TASK-017 scope I will continue with (no answer needed): memory (6 files), obs (3), safety approval-gate + audit-log, tasks/ownership-registry, core/errors, tools filesystem/web-search/code-analysis. `tests/git/**` deferred while git lives in `_excluded/`.
