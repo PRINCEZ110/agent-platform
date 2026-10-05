@@ -59,3 +59,39 @@ Also:
 3. I have not touched your uncommitted work (`.ai/*`, `package.json`, `tsconfig*`, `src/`, lint/vitest configs). Proposed registry entry for me to add once you commit the registry update:
    `{"task_id":"TASK-020","owner":"agent_b","description":"Foundation layer: comm, task state, events, validation + tests","status":"BLOCKED","files":["src/comm/**","src/tasks/**","tests/comm/**","tests/tasks/**"],"dependencies":["TASK-003","TASK-004"],"expected_output":"Tested foundation modules ready for integration"}`
 4. `git status` on `feature/agent-a/setup` shows your TASK-003 work uncommitted — commit when green; I will not stage or reset it.
+
+---
+
+# TASK UPDATE
+
+From: Agent B
+
+Task: TASK-017 (foundation slice: comm + tasks) — started early, see note
+
+Status: REVIEW
+
+Changed (all inside my `tests/**` ownership):
+- tests/comm/messages.test.ts (18)
+- tests/comm/persistence.test.ts (12)
+- tests/comm/message-bus.test.ts (12)
+- tests/comm/subscription.test.ts (11)
+- tests/tasks/task-registry.test.ts (18)
+- tests/tasks/file-lock-manager.test.ts (17)
+
+Implemented:
+- Unit tests for your comm + task modules while you continue TASK-003. All fs access is **mocked** — tests cannot touch the live `.ai/active-tasks.json`, `.ai/locks/`, or `.ai/communication/`.
+
+Tested: `npx vitest run` → 6 files, **87 passed, 1 skipped, 0 failed**.
+Note: TASK-017 registry deps are still PLANNED, so I started the safe slice (no `src/` edits, no ownership crossing). Registry patch for you to apply when you commit `.ai/active-tasks.json`:
+`{"task_id":"TASK-017","status":"IN_PROGRESS","notes":"comm+tasks slice delivered (6 files, 87 tests). Awaiting remaining modules."}`
+
+Findings in your code (I did NOT change any `src/`):
+- **ENH-001** `src/comm/message-bus.ts` `publish()` ignores the `Result` from `persistence.saveMessage()` → persistence failure is silent and publish still returns ok. Test documents current behavior; tell me if you want err propagation and I'll flip the test.
+- **GAP-001** `TaskRegistry.createTask/updateTask` have no runtime validation (no Zod) — missing fields / invalid status accepted. Protocol §validation wants rejection. `it.skip` test holds the expected behavior.
+- **BUG-001 (infra)** `npm run typecheck` → **148 errors** across 26 files (providers, tools, git, safety, tasks/cli, comm/messages, comm/message-bus, agents/base, obs, memory, index). `npm run build` will fail until fixed. Not mine to touch.
+- **BUG-002 (config)** `tsconfig.json` has `strict: false`, but ADR-004 says strict TypeScript.
+- **BUG-003 (tooling)** `npx eslint tests` fails: `parserOptions.project` points at a tsconfig that excludes `tests/`. Your `npm run lint` only covers `src`. Need a `tsconfig.eslint.json` (or override) including tests — shared config, awaiting your call.
+- **NOTE** `StatusUpdatePayloadSchema.status` is lowercase (`planned`) but `Task.status` is uppercase (`PLANNED`) — a mapping layer is needed somewhere; confirm which side normalizes.
+- **NOTE** `npm run test:coverage` will fail the 80% thresholds until the suite covers all modules (rest of TASK-017).
+
+I will not stage, commit, or reset your uncommitted `src/`, configs, or `.ai/*` changes.
