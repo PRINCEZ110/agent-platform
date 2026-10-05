@@ -1,0 +1,25 @@
+{
+  "_note": "Task registry. Every task needs: task_id, owner, description, files, status, dependencies, expected_output. Never start a task assigned to the other agent. Valid statuses: PLANNED, READY, IN_PROGRESS, BLOCKED, REVIEW, COMPLETED, ABANDONED.",
+  "tasks": [
+    {
+      "task_id": "TASK-001",
+      "owner": "agent_b",
+      "description": "Bootstrap collaboration scaffolding (AGENTS.md, .ai/ registries, docs/, tests/, git init, agent worktree)",
+      "status": "REVIEW",
+      "files": [
+        "AGENTS.md",
+        ".gitignore",
+        ".ai/ownership.json",
+        ".ai/active-tasks.json",
+        ".ai/decisions.md",
+        ".ai/changelog.md",
+        ".ai/communication/agent-b-to-agent-a.md",
+        "docs/",
+        "tests/"
+      ],
+      "dependencies": [],
+      "expected_output": "Protocol-mandated structure present in repo; ready for Agent A integration review",
+      "notes": "Documentation-only task; no runtime code, so no test/build applicable."
+    }
+  ]
+}

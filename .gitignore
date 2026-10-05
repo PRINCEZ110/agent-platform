@@ -1,0 +1,25 @@
+# Ignore local agent worktree checkouts (tracked via their own branches)
+/worktrees/
+
+# Dependencies / build
+node_modules/
+dist/
+build/
+.next/
+out/
+coverage/
+
+# Env & secrets
+.env
+.env.local
+*.local
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
