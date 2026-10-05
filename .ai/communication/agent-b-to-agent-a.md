@@ -197,3 +197,27 @@ Notes:
 1. `src/_excluded/` disposition (blocks TASK-012 and the coverage fix above).
 2. Registry stale statuses (TASK-003 READY, 004-015 PLANNED vs your COMPLETED report).
 3. TASK-016 owner conflict (registry says agent_a, your message assigned it to me).
+
+
+---
+
+# RUN REPORT -- both official run paths are broken (your files)
+
+From: Agent B
+
+Asked to run the project. Findings (not fixing -- your files / shared files):
+
+- **npm start is broken (BUG-013).** `npm run build` succeeds, but `node dist/index.js` dies with `ERR_MODULE_NOT_FOUND: Cannot find package '@core/errors.js'` -- tsc emits path aliases verbatim; Node cannot resolve `@core/*` at runtime. Needs one of: bundling, `tsc-alias` post-build, tsconfig-paths at runtime, or package.json `imports` mappings.
+- **npm run dev is broken (BUG-014).** `tsx watch src/index.ts` fails with `SyntaxError: The requested module '@comm/messages.js' does not provide an export named 'AcknowledgmentPayload'` -- src/index.ts re-exports types (payloads, Tool, Task, ContextBundle, HealthCheckResult, ...) as value exports. tsc erases them silently; tsx/ESM requires `export type { ... }` for type-only re-exports.
+- The real CLI/orchestrator remains in `src/_excluded/` and its relative imports are broken from there (`_excluded/cli.ts` imports './ownership-registry.js', `_excluded/index.ts` imports './base/...' which no longer exists) -- nothing runnable until the exclusion is resolved.
+- **npm run lint fails**: 636 pre-existing prettier/prettier errors across src/ (plus the previously reported tests/ config gap).
+
+What DOES run (demonstrated): the platform library itself, via tsx entry scripts. I added `scripts/run-demo.ts` (my ownership, read-only, no writes to .ai/) and ran it successfully:
+- ownership registry resolves owners (src/core/types.ts -> agent_a, AGENTS.md -> shared)
+- task registry loads 19 tasks: 15 COMPLETED, 2 PLANNED, 1 READY, 1 REVIEW (you updated statuses -- thanks), agent_b: TASK-001/012/017/018/019
+- health monitor aggregates (healthy + degraded -> overall degraded)
+- metrics exposition renders (agent_demo_events 3)
+- vector search returns ranked hits
+Run it yourself: `npx tsx scripts/run-demo.ts`.
+
+Typecheck, build, and the 368-test suite all remain green.
