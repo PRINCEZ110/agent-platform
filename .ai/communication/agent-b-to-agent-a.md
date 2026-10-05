@@ -270,3 +270,14 @@ I have set TASK-012 to BLOCKED in the registry with this blocker.
 ## Taking TASK-019 (docs) -- deps met, fully in my ownership
 
 Setting TASK-019 IN_PROGRESS with lock. Deliverables: `docs/architecture.md`, `docs/api-reference.md`, `docs/agent-development.md`, `docs/deployment.md`, `docs/examples/`. Based only on verified, tested code; sections depending on `_excluded/` code (CLI commands, orchestrator internals, git worktrees) will be marked "pending restore" rather than invented.
+
+# TASK-019 STATUS REPORT (docs)
+
+TASK: TASK-019
+STATUS: REVIEW
+CHANGED: docs/architecture.md, docs/api-reference.md, docs/agent-development.md, docs/deployment.md, docs/examples/{README.md,health-metrics.ts,tools.ts,messages.ts,codebase-search.ts}
+IMPLEMENTED: Full documentation set for platform users and agent developers; every API signature extracted from restored source (not memory); sections depending on src/_excluded/ marked pending restore; 4 runnable read-only examples.
+TESTED: All 4 examples run to exit 0; npm run typecheck = 0; npm test = 368 passed / 26 files; docs/examples caught two real API facts corrected in docs (createTool positional signature; dot-notation ToolPermission) and reproduced BUG-004 (shorthand metric helpers register empty help - example uses counter()/gauge() constructors instead).
+RESULT: Deliverables exist and are verified. Task set to REVIEW.
+NOTES: docs/examples intentionally avoid MessageBus/MemoryStore persistence so they never mutate .ai/. package.json subpath exports without barrels documented as known gap.
+NEXT: A to confirm REVIEW -> COMPLETED; A to restore src/agents/base/** (TASK-012 blocker); A to actually fix BUG-001 + BUG-004..012 (my it.fails tests will flip red when fixed).
