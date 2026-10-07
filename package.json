@@ -1,0 +1,86 @@
+{
+  "name": "agent-platform",
+  "version": "0.1.0",
+  "description": "Modular, model-agnostic autonomous AI agent platform",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./core": "./dist/core/index.js",
+    "./providers": "./dist/providers/index.js",
+    "./tools": "./dist/tools/index.js",
+    "./git": "./dist/git/index.js",
+    "./comm": "./dist/comm/index.js",
+    "./memory": "./dist/memory/index.js",
+    "./tasks": "./dist/tasks/index.js",
+    "./safety": "./dist/safety/index.js",
+    "./obs": "./dist/obs/index.js",
+    "./agents": "./dist/agents/index.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json && tsc-alias",
+    "build:watch": "tsc -p tsconfig.build.json --watch",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts",
+    "clean": "rm -rf dist coverage .turbo",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run lint && npm run typecheck && npm run test"
+  },
+  "keywords": [
+    "ai",
+    "agent",
+    "autonomous",
+    "llm",
+    "platform",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@opentelemetry/api": "^1.7.0",
+    "@opentelemetry/resources": "^1.20.0",
+    "@opentelemetry/sdk-node": "^0.45.0",
+    "@opentelemetry/semantic-conventions": "^1.20.0",
+    "chalk": "^5.3.0",
+    "commander": "^12.0.0",
+    "glob": "^10.3.10",
+    "ora": "^8.0.1",
+    "pino": "^8.17.2",
+    "pino-pretty": "^10.3.1",
+    "prom-client": "^15.1.0",
+    "simple-git": "^3.22.0",
+    "uuid": "^9.0.1",
+    "yaml": "^2.3.4",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/uuid": "^9.0.7",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "@vitest/coverage-v8": "^1.2.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "prettier": "^3.2.4",
+    "tsc-alias": "^1.9.7",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "packageManager": "npm@10.2.0"
+}

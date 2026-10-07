@@ -1,28 +1,35 @@
 {
-  "_note": "PROVISIONAL - bootstrapped by Agent B from the protocol role definitions because no application architecture exists yet. No src/ tree exists at this time. Ownership changes only by explicit coordination recorded in .ai/communication/ and reflected here.",
+  "_note": "FINALIZED per ADR-003. Ownership reflects the modular agent platform architecture. Changes only by explicit coordination recorded in .ai/communication/ and reflected here.",
   "agent_a": {
-    "description": "Lead Engineer: architecture, core application logic, integration, shared interfaces",
+    "description": "Lead Engineer: architecture, core runtime, providers, tools, git, comm, memory, tasks, safety, obs, integration",
     "files": [
       "src/core/**",
-      "src/api/**",
-      "src/services/**",
-      "src/db/**",
-      "src/state/**",
+      "src/providers/**",
+      "src/tools/**",
+      "src/git/**",
+      "src/comm/**",
+      "src/memory/**",
+      "src/tasks/**",
+      "src/safety/**",
+      "src/obs/**",
+      "src/agents/lead/**",
       "src/types/**",
       "src/app/**",
       "migrations/**"
     ]
   },
   "agent_b": {
-    "description": "Specialist Engineer: assigned feature modules, UI/UX, tests, performance, tooling, documentation",
+    "description": "Specialist Engineer: specialist agent implementation, UI/UX, tests, performance, tooling, documentation",
     "files": [
-      "src/components/**",
+      "src/agents/specialist/**",
       "src/ui/**",
+      "src/components/**",
       "src/styles/**",
       "src/features/**",
       "tests/**",
       "docs/**",
-      "scripts/**"
+      "scripts/**",
+      "examples/**"
     ]
   },
   "shared": {
@@ -36,7 +43,9 @@
       ".env.example",
       "README.md",
       "src/routes/**",
-      "src/index.*"
+      "src/index.*",
+      "src/agents/base/**",
+      "src/agents/interfaces/**"
     ]
   }
 }
